@@ -14,8 +14,12 @@ const contentSchema = new Schema({
         type: String,
         required: true
     },
-    body: {
+    content_body: {
         type: String,
+        required: true
+    },
+    send_at: {
+        type: Date,
         required: true
     }
 });

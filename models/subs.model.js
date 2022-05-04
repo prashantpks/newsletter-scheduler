@@ -12,7 +12,7 @@ const subSchema = new Schema({
     },
     subsList: [
         {
-            type: String
+            type: String,
         }
     ]
 });

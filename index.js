@@ -8,6 +8,7 @@ app.use(express.json());
 
 
 //Available Routes
+app.use('/',require('./routes/newsletter.route'));
 
 
 //Listen for connections
