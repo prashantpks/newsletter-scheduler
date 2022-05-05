@@ -21,6 +21,11 @@ const contentSchema = new Schema({
     send_at: {
         type: Date,
         required: true
+    },
+    isSent: {
+        type: Boolean,
+        default: false,
+        required: true
     }
 });
 
