@@ -4,6 +4,7 @@ const {v4 : uuidv4} = require('uuid');
 const Subscribers = require('../models/subs.model');
 const Content = require('../models/content.model');
 
+//ROUTE 1: POST: /addsub to add subscribers in the topic
 router.post('/addsub', async (req,res)=>{
     let status = 'failed';
 
@@ -11,13 +12,15 @@ router.post('/addsub', async (req,res)=>{
         const subs = req.body;
         const subEmail = subs.email;
         const topic = subs.topic;
-
         const oldTopic = await Subscribers.findOne({topic_name: topic});
+
+        //If the topic already exists push the subscriber in subsList of that topic, else create a topic and push the subscriber
         if(oldTopic){
             const id = oldTopic._id;
             let flag = false;
             let sList = oldTopic.subsList;
 
+            //Adding unique email in subscribers list
             for(let x = 0;x<sList.length; x++){
                 if(sList[x] === subEmail){
                     flag = true;
@@ -62,10 +65,11 @@ router.post('/addsub', async (req,res)=>{
     }
 });
 
-
+//ROUTE 2: POST: /addcontent to add content
 router.post('/addcontent', async (req,res)=>{
     let status = "failed";
 
+    //Create the content sent as req body
     try{
         const ctitle = req.body.title;
         const ctopic = req.body.topic;
@@ -86,13 +90,10 @@ router.post('/addcontent', async (req,res)=>{
         }
 
         status = "success";
-
         return res.status(200).json({status, content});
     }catch(err){
         return res.status(500).json({status,error:err.message,message:"Internal server error"});
     }
 });
-
-
 
 module.exports = router;

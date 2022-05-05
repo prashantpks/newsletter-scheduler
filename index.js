@@ -15,6 +15,7 @@ app.use(express.json());
 //Available Routes
 app.use('/',require('./routes/newsletter.route'));
 
+
 //Reference from: https://codingstatus.com/node-js-send-email/#:~:text=How%20to%20send%20Email%20in%20Node.js%201%20Install,email%20address%2C%20subject%20%26%20message%20in%20the%20form.
 //Sending newsletters using nodemailer
 const sendEmail = async (content)=>{
@@ -22,7 +23,7 @@ const sendEmail = async (content)=>{
   const receiver = subs[0].subsList;
   const receiverString = receiver.join(', ');
 
-  // console.log(receiverString[0].subsList.join(', '));
+  //Using Gmail as a transport service and created transporter object
   let transporter = nodemailer.createTransport({
     host: 'smtp.gmail.com',
     port: 587,
@@ -35,9 +36,9 @@ const sendEmail = async (content)=>{
   });
 
   let subject = 'CureLink | '+content.topic+' | '+content.title;
-  console.log(subject);
+  // console.log(subject);
   let text = content.content_body;
-  console.log(text);
+  // console.log(text);
 
   let mailOptions = {
     from: process.env.DEV_MAIL,
@@ -46,6 +47,7 @@ const sendEmail = async (content)=>{
     text
   };
   
+  //Sending mail through sendMail() function of transporter object
   transporter.sendMail(mailOptions, function(error, info){
     if (error) {
       console.log(error);
@@ -55,28 +57,32 @@ const sendEmail = async (content)=>{
   }); 
 }
 
+
 //Reference from Stackoverflow: https://stackoverflow.com/questions/65647286/booking-reminder-nodemailer-node-cron-mongodb
 //Scheduling our email using node-cron
 cron.schedule('00 * * * * *', ()=>{
+  //Search for contents which are not sent yet
   Content.find({isSent: false}).then((contents)=>{
     let cList = [];
     for(let content of contents){
       let send_time = moment(content.send_at).valueOf();
       let cur_time = moment.utc().valueOf();
-      // console.log(send_time,cur_time);
+      
+      //Push the contents in the array whose current time matches with the sent time
       if(Math.abs(send_time-cur_time)<=59000){
         cList.push(content);
       }
-      
     }
     return cList;
   }).then((cList)=>{
+
+    //Send all the contents of the array via email and make isSent: true
     for(let li of cList){
       sendEmail(li);
       Content.findByIdAndUpdate(li._id,{"$set": {"isSent": true}},
       function(err){
         if(err){ 
-            return res.status(400).json({success,error:err});
+            console.log(err);
         }
     });
     }
