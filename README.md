@@ -1,9 +1,6 @@
 # CureLink Intern Assignment
 
-Backend intern assignment at CureLink.
-
-## Problem Statement
-You can read the problem statement [here](https://docs.google.com/document/d/1auHTTKSA34s_fOEbeWXh7B45acBSyZl5Ig4Fu0h00yU/edit?usp=sharing).
+Backend program which schedules the newletters of different topics.
 
 ## Technologies Used
 * Nodejs
