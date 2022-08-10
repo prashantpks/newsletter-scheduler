@@ -1,4 +1,4 @@
-# CureLink Intern Assignment
+# Newsletter Scheduler
 
 Backend program which schedules the newletters of different topics.
 
